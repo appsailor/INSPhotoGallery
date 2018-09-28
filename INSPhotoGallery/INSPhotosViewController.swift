@@ -150,7 +150,7 @@ open class INSPhotosViewController: UIViewController, UIPageViewControllerDataSo
         let textColor = view.tintColor ?? UIColor.white
         if let overlayView = overlayView as? INSPhotosOverlayView {
             overlayView.photosViewController = self
-            overlayView.titleTextAttributes = [NSForegroundColorAttributeName: textColor]
+            overlayView.titleTextAttributes = [convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): textColor]
         }
     }
     
@@ -165,10 +165,10 @@ open class INSPhotosViewController: UIViewController, UIPageViewControllerDataSo
         pageViewController.view.addGestureRecognizer(panGestureRecognizer)
         pageViewController.view.addGestureRecognizer(singleTapGestureRecognizer)
         
-        addChildViewController(pageViewController)
+        addChild(pageViewController)
         view.addSubview(pageViewController.view)
         pageViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        pageViewController.didMove(toParentViewController: self)
+        pageViewController.didMove(toParent: self)
         
         setupOverlayView()
     }
@@ -194,7 +194,7 @@ open class INSPhotosViewController: UIViewController, UIPageViewControllerDataSo
     }
     
     private func setupPageViewControllerWithInitialPhoto(_ initialPhoto: INSPhotoViewable? = nil) {
-        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: 16.0])
+        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: convertToOptionalUIPageViewControllerOptionsKeyDictionary([convertFromUIPageViewControllerOptionsKey(UIPageViewController.OptionsKey.interPageSpacing): 16.0]))
         pageViewController.view.backgroundColor = UIColor.clear
         pageViewController.delegate = self
         pageViewController.dataSource = self
@@ -397,3 +397,19 @@ open class INSPhotosViewController: UIViewController, UIPageViewControllerDataSo
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalUIPageViewControllerOptionsKeyDictionary(_ input: [String: Any]?) -> [UIPageViewController.OptionsKey: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIPageViewController.OptionsKey(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIPageViewControllerOptionsKey(_ input: UIPageViewController.OptionsKey) -> String {
+	return input.rawValue
+}

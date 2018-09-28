@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         
         for photo in photos {
             if let photo = photo as? INSPhoto {
-                photo.attributedTitle = NSAttributedString(string: "Example caption text\ncaption text", attributes: [NSForegroundColorAttributeName: UIColor.white])
+                photo.attributedTitle = NSAttributedString(string: "Example caption text\ncaption text", attributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.white]))
             }
         }
     }
@@ -67,4 +67,15 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
         }
         present(galleryPreview, animated: true, completion: nil)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

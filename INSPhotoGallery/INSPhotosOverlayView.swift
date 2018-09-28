@@ -53,7 +53,7 @@ open class INSPhotosOverlayView: UIView , INSPhotosOverlayViewable {
     }
     var titleTextAttributes: [String : AnyObject] = [:] {
         didSet {
-            navigationBar.titleTextAttributes = titleTextAttributes
+            navigationBar.titleTextAttributes = convertToOptionalNSAttributedStringKeyDictionary(titleTextAttributes)
         }
     }
     
@@ -172,4 +172,10 @@ open class INSPhotosOverlayView: UIView , INSPhotosOverlayViewable {
         let trailingConstraint = NSLayoutConstraint(item: captionLabel, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 8.0)
         self.addConstraints([bottomConstraint,leadingConstraint,trailingConstraint])
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }
